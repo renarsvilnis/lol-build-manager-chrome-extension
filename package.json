@@ -1,0 +1,11 @@
+{
+  "name": "lol-build-manager-chrome-extension",
+  "version": "0.0.1",
+  "description": "Chrome extension for League of Legends build manager",
+  "author": "Renārs Vilnis <renars.vilnis@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "lol-build-manager-config": "git+https://github.com/renarsvilnis/lol-build-manager-config.git",
+    "lol-build-manager-util": "git+https://github.com/renarsvilnis/lol-build-manager-util.git"
+  }
+}
