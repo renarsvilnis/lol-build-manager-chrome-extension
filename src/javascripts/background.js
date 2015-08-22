@@ -1,9 +1,9 @@
 
 const config = require('lol-build-manager-config');
-let util = require('lol-build-mananger-config');
+var util = require('lol-build-manager-util');
 
 let isSiteSupported = function(url) {
-  return util.isSubstringsInString(url, SUPPORTED_SITES) > -1;
+  return util.isSubstringsInString(url, config.supportedBuildSites) > -1;
 };
 
 // Called when the url of a tab changes.
@@ -19,19 +19,17 @@ chrome.tabs.onUpdated.addListener(checkForValidUrl);
 chrome.pageAction.onClicked.addListener(function(tab) {
 
   // TODO: get additional info about the website
-  // data object for the native applications
-  var data = {
+  // data object which gets sent to the native application
+  let data = {
     url: tab.url
   };
 
   // new tab options
-  var opts = {
-    url: config.shema + '://' + util.encodeUrlData(data)
+  let opts = {
+    url: config.urlProtocol + '://' + util.encodeUrlData(data)
   };
 
   chrome.tabs.create(opts, function(newTab) {
-    console.log('Data sent:', opts.url);
-
     // TODO: listen when tab loaded then close it
     // chrome.tabs.remove(newTab.id);
   });

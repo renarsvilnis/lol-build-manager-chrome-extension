@@ -6,7 +6,7 @@
 var del               = require('del'),
     through2          = require('through2'),
     browserify        = require('browserify'),
-    babelify          = require('babelify'),
+    babelify          = require('babelify');
 
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')({
@@ -23,13 +23,13 @@ var $ = require('gulp-load-plugins')({
 var env = process.env.NODE_ENV || 'development';
 
 var IN_BASE  = 'src/';
-var OUT_BASE = 'public/';
+var OUT_BASE = 'dist/';
 var BOWER    = 'bower_components/';
 
 var IN  = {
   CSS   : IN_BASE + 'scss/',
-  JS    : IN_BASE + 'js/',
-  IMG   : IN_BASE + 'img/',
+  JS    : IN_BASE + 'javascripts/',
+  IMG   : IN_BASE + 'images/',
   FONTS : IN_BASE + 'fonts/',
   HTML  : IN_BASE + 'html/',
 };
@@ -65,21 +65,26 @@ gulp.task('clean', function(cb) {
 });
 
 // ####################
+// HTML
+// ####################
+gulp.task('manifest', function() {
+  return gulp.src(IN_BASE + 'manifest.json')
+    .pipe(gulp.dest(OUT_BASE));
+});
+
+// ####################
 // IMAGES
 // ####################
 gulp.task('images', function() {
-
   return gulp.src(IN.IMG + '**/*')
-    .pipe($.if (isProduction(), $.cache(
-        $.imagemin({
-          optimizationLevel: 3,
-          progressive: true,
-          interlaced: true,
-          svgoPlugins: [{
-            cleanupIDs: false
-          }] // don't remove IDs from SVGs
-        })
-      )))
+    .pipe($.if(isProduction(), $.imagemin({
+      optimizationLevel: 3,
+      progressive: true,
+      interlaced: true,
+      svgoPlugins: [
+        {cleanupIDs: false}
+      ]
+    })))
     .pipe(gulp.dest(OUT.IMG));
 });
 
@@ -89,7 +94,7 @@ gulp.task('images', function() {
 // ####################
 gulp.task('browserify', function() {
 
-  return gulp.src(IN.JS + 'site.js')
+  return gulp.src(IN.JS + 'background.js')
     .pipe(through2.obj(function (file, enc, next) {
       browserify(file.path, {
         debug        : isProduction(),
@@ -119,7 +124,7 @@ gulp.task('browserify', function() {
 // TASKS
 // ####################
 gulp.task('default', ['clean'], function() {
-  gulp.start('images', 'browserify', function(){
+  gulp.start('manifest', 'images', 'browserify', function(){
 
     // only launch in development
     if(isDevelopment()) {
@@ -132,7 +137,11 @@ gulp.task('default', ['clean'], function() {
 });
 
 gulp.task('watch', function () {
+  gulp.watch(IN_BASE + 'manifest.json', ['manifest']);
+  gulp.watch(IN.IMG + '**/*', ['images']);
+  gulp.watch(IN.JS + '**/*.{js,jsx}', ['browserify']);
+});
 
-  $.watch(IN.IMG + '**/*', ['images']);
-  $.watch(IN.JS + '**/*.{js,jsx}', ['browserify']);
+gulp.task('dist', function() {
+
 });
