@@ -28,8 +28,8 @@ var BOWER    = 'bower_components/';
 
 var IN  = {
   CSS   : IN_BASE + 'scss/',
-  JS    : IN_BASE + 'javascripts/',
-  IMG   : IN_BASE + 'images/',
+  JS    : IN_BASE + 'js/',
+  IMG   : IN_BASE + 'img/',
   FONTS : IN_BASE + 'fonts/',
   HTML  : IN_BASE + 'html/',
 };
