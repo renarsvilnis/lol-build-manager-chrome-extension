@@ -3,10 +3,10 @@
 // ########################################
 // Modules
 // ########################################
-var del               = require('del'),
-    through2          = require('through2'),
-    browserify        = require('browserify'),
-    babelify          = require('babelify');
+var del        = require('del'),
+    source     = require('vinyl-source-stream'),
+    browserify = require('browserify'),
+    babelify   = require('babelify');
 
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')({
@@ -94,29 +94,18 @@ gulp.task('images', function() {
 // ####################
 gulp.task('browserify', function() {
 
-  return gulp.src(IN.JS + 'background.js')
-    .pipe(through2.obj(function (file, enc, next) {
-      browserify(file.path, {
-        debug        : isProduction(),
-        // builtins     : false,
-        insertGlobals: false,
-        cache        : {},
-        packageCache : {},
-        fullPaths    : false
-      })
-        .transform(babelify)
-        .bundle(function (err, res) {
-          if(err)
-            return next(err);
+  var filename = 'background.js';
 
-          file.contents = res;
-          next(null, file);
-        });
-    })).on('error', function (error) {
-      console.log(error.stack);
-      this.emit('end');
+  return browserify({
+    entries: IN.JS + filename,
+    debug: true,
+  })
+    .transform(babelify)
+    .bundle()
+    .on('error', function(err) {
+      console.log('Error:', err.message);
     })
-    // .pipe($.rename('site.js'))
+    .pipe(source(filename))
     .pipe(gulp.dest(OUT.JS));
 });
 
@@ -140,8 +129,4 @@ gulp.task('watch', function () {
   gulp.watch(IN_BASE + 'manifest.json', ['manifest']);
   gulp.watch(IN.IMG + '**/*', ['images']);
   gulp.watch(IN.JS + '**/*.{js,jsx}', ['browserify']);
-});
-
-gulp.task('dist', function() {
-
 });

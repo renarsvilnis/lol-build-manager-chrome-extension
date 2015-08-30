@@ -3,19 +3,19 @@
   "version": "0.0.1",
   "description": "Chrome extension for League of Legends build manager",
   "author": "Renārs Vilnis <renars.vilnis@gmail.com>",
+  "scripts": {
+    "build": "NODE_ENV=production ./node_modules/gulp/bin/gulp.js"
+  },
   "license": "MIT",
   "devDependencies": {
     "babelify": "^6.2.0",
     "browserify": "^11.0.1",
     "del": "^1.2.1",
     "gulp": "^3.9.0",
-    "gulp-concat": "^2.6.0",
     "gulp-if": "^1.2.5",
     "gulp-imagemin": "^2.3.0",
-    "gulp-livereload": "^3.8.0",
     "gulp-load-plugins": "^0.10.0",
-    "lol-build-manager-config": "git+https://github.com/renarsvilnis/lol-build-manager-config.git",
     "lol-build-manager-util": "git+https://github.com/renarsvilnis/lol-build-manager-util.git",
-    "through2": "^2.0.0"
+    "vinyl-source-stream": "^1.1.0"
   }
 }
