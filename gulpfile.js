@@ -23,7 +23,7 @@ var $ = require('gulp-load-plugins')({
 var env = process.env.NODE_ENV || 'development';
 
 var IN_BASE  = 'src/';
-var OUT_BASE = 'dist/';
+var OUT_BASE = 'build/';
 var BOWER    = 'bower_components/';
 
 var IN  = {
