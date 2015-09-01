@@ -1,9 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "League of legends build manager",
-  "description": "Chrome extension for League of Legends build manager application",
+  "name": "League of legends Build Manager",
+  "description": "Chrome extension for League of Legends Build Manager application",
   "version": "0.1",
-
 
   "icons": {
     "16": "images/icons/icon-16.png",
@@ -17,7 +16,7 @@
       "19": "images/icons/icon-16.png",
       "38": "images/icons/icon-32.png"
     },
-    "default_title": "Send build to League of Legends builder"
+    "default_title": "Send guide to the League of Legends Builder Manager"
   },
   
   "background": {
