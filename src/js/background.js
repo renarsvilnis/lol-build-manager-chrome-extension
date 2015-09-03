@@ -26,17 +26,18 @@ let tabExists = function(tabId, callback) {
 // Listen for any changes to the URL of any tab.
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   tabExists(tabId, function(err, exists) {
-    if(exists && isSiteSupported(tab.url))
+    if(!err && exists && isSiteSupported(tab.url))
       chrome.pageAction.show(tabId);
   });
 });
 
 // Listen to page action clicks
 chrome.pageAction.onClicked.addListener(function(tab) {
+
   tabExists(tab.id, function(err, exists) {
 
     // just ignore non-existing tabs
-    if(!exists)
+    if(err || !exists)
       return;
 
     // data object which gets sent to the native application
@@ -44,17 +45,20 @@ chrome.pageAction.onClicked.addListener(function(tab) {
       url: tab.url
     };
 
-    let newTabUrl = createAppProtocolUrl(data);
+    createAppProtocolUrl(data, function(err, newTabUrl) {
 
-    // new tab options
-    let opts = {
-      url: newTabUrl
-    };
+      if(err)
+        return;
 
-    chrome.tabs.create(opts, function(newTab) {
-      // TODO: listen when tab loaded then close it
-      // chrome.tabs.remove(newTab.id);
+      // new tab options
+      let opts = {
+        url: newTabUrl
+      };
+
+      chrome.tabs.create(opts, function(newTab) {
+        // TODO: listen when tab loaded then close it
+        // chrome.tabs.remove(newTab.id);
+      });
     });
   });
-  
 });
